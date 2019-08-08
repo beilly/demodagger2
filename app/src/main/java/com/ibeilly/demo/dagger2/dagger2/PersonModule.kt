@@ -3,32 +3,38 @@ package com.ibeilly.demo.dagger2.dagger2
 import com.ibeilly.demo.dagger2.DemoActivity
 import com.ibeilly.demo.dagger2.MainActivity
 import com.ibeilly.demo.dagger2.bean.Car
-import com.ibeilly.demo.dagger2.bean.Person
+import com.ibeilly.demo.dagger2.bean.Dog
 import dagger.Component
 import dagger.Module
 import dagger.Provides
+import javax.inject.Named
 import javax.inject.Scope
 import kotlin.random.Random
 
 @Module
-class PersonModule {
-
-
-    @Provides
-    fun providePerson(car: Car): Person =
-        Person().apply {
-            this.car = car
-        }
+class CarModule {
 
     @Provides
     @BaseScope
-    fun provideCar(): Car = Car("大众: ${Random.nextInt(100)}" )
+    fun provideCar() = Car("大众: ${Random.nextInt(100)}")
+
+    @Provides
+    @BaseScope
+    @Named("dogName")
+    fun provideDogName() = "哈士奇: ${Random.nextInt(100)}"
+
+    @Provides
+    @BaseScope
+    fun provideDog(@Named("dogName") dogName: String, car: Car) = Dog().apply {
+        this.name = dogName
+        this.car = car
+    }
 }
 
 
 @BaseScope
-@Component(modules = [PersonModule::class], dependencies = [AppComponent::class])
-interface PersonComponent {
+@Component(modules = [CarModule::class], dependencies = [AppComponent::class])
+interface CarComponent {
 
     fun inject(activity: MainActivity)
 
