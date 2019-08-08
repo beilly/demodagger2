@@ -8,10 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
 import com.google.android.material.snackbar.Snackbar
-import com.ibeilly.demo.dagger2.bean.Car
 import com.ibeilly.demo.dagger2.bean.Dog
-import com.ibeilly.demo.dagger2.bean.Person
-import com.ibeilly.demo.dagger2.dagger2.DaggerCarComponent
 import dagger.Lazy
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
@@ -21,18 +18,6 @@ import kotlin.random.Random
 
 @Route(path = "/app/main")
 class MainActivity : AppCompatActivity() {
-
-    @Inject
-    lateinit var car1: Car
-
-    @Inject
-    lateinit var car2: Car
-
-    @Inject
-    lateinit var person1: Person
-
-    @Inject
-    lateinit var person2: Person
 
     @Inject
     lateinit var dog1: Dog
@@ -53,10 +38,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        DaggerCarComponent.builder()
-            .appComponent(app.appComponent)
+        app.appComponent.mainComponent()
+            .dogName("哈士奇-${Random.nextInt(100)}")
             .build()
-            .inject(this)
+            .injectMain(this)
 
         tvLog.text = """
                 ${pretty("car1")}
@@ -86,8 +71,6 @@ class MainActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.action_settings -> {
                 ARouter.getInstance().build("/app/demo")
-                    .withObject("car1", car1)
-                    .withObject("person1", person1)
                     .navigation()
                 true
             }

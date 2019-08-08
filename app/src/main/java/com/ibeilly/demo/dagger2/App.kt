@@ -6,6 +6,7 @@ import android.os.Handler
 import android.widget.Toast
 import com.alibaba.android.arouter.launcher.ARouter
 import com.ibeilly.demo.dagger2.dagger2.AppComponent
+import com.ibeilly.demo.dagger2.dagger2.AppModule
 import com.ibeilly.demo.dagger2.dagger2.DaggerAppComponent
 import com.ibeilly.demo.dagger2.kotlin.getPropertyValue
 import com.ibeilly.demo.dagger2.kotlin.invokeMethod
@@ -25,7 +26,9 @@ class App : Application() {
     }
 
     private fun initDagger() {
-        appComponent = DaggerAppComponent.create()
+        appComponent = DaggerAppComponent.builder()
+            .appModule(AppModule(this))
+            .build()
     }
 
     private fun initARouter() {

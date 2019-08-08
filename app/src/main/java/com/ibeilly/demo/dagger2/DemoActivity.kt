@@ -5,12 +5,10 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.alibaba.android.arouter.facade.annotation.Autowired
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
 import com.google.android.material.snackbar.Snackbar
 import com.ibeilly.demo.dagger2.bean.Car
-import com.ibeilly.demo.dagger2.bean.Dog
 import com.ibeilly.demo.dagger2.bean.Person
 import com.ibeilly.demo.dagger2.dagger2.DaggerCarComponent
 import dagger.Lazy
@@ -22,20 +20,11 @@ import javax.inject.Inject
 @Route(path = "/app/demo")
 class DemoActivity : AppCompatActivity() {
 
-    @Autowired(name = "car1")
-    lateinit var carParam: Car
-
     @Inject
     lateinit var car2: Car
 
-    @Autowired(name = "person1")
-    lateinit var personParam: Person
-
     @Inject
     lateinit var person2: Person
-
-    @Inject
-    lateinit var dog1: Dog
 
     @Inject
     lateinit
