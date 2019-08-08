@@ -1,23 +1,23 @@
 package com.ibeilly.demo.dagger2
 
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
+import com.google.android.material.snackbar.Snackbar
 import com.ibeilly.demo.dagger2.bean.Car
+import com.ibeilly.demo.dagger2.bean.Dog
 import com.ibeilly.demo.dagger2.bean.Person
-import com.ibeilly.demo.dagger2.dagger2.DaggerPersonComponent
-import com.ibeilly.demo.dagger2.dagger2.PersonModule
-
+import com.ibeilly.demo.dagger2.dagger2.DaggerCarComponent
+import dagger.Lazy
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import java.text.DateFormat
-import java.text.SimpleDateFormat
 import javax.inject.Inject
+import kotlin.random.Random
 
 @Route(path = "/app/main")
 class MainActivity : AppCompatActivity() {
@@ -34,8 +34,18 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var person2: Person
 
-//    @Inject lateinit
-    var format: DateFormat = SimpleDateFormat()
+    @Inject
+    lateinit var dog1: Dog
+
+    @Inject
+    lateinit var dog2: Dog
+
+    @Inject
+    lateinit
+    var format: DateFormat
+
+    @Inject
+    lateinit var toast: Lazy<Toast>
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,22 +53,26 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        DaggerPersonComponent.builder()
+        DaggerCarComponent.builder()
             .appComponent(app.appComponent)
             .build()
             .inject(this)
 
+        tvLog.text = """
+                ${pretty("car1")}
+                ${pretty("car2")}
+                ${pretty("person1")}
+                ${pretty("person2")}
+                ${pretty("dog1")}
+                ${pretty("dog2")}
+                ${pretty("format")}
+                ${pretty("toast")}
+            """
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-
-            tvLog.text = """
-                car1: ${car1.print}
-                car2: ${car2.print}
-                person1: ${person1.print}
-                person2: ${person2.print}
-                format: ${format.print}
-            """
+                .setAction("Action") {
+                    toast.get().show("Aciton ${Random.nextInt(100)}")
+                }.show()
         }
     }
 
